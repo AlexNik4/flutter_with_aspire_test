@@ -26,6 +26,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _envVariable = 'Loading...';
+  String _otherEnvVariable = 'Loading...';
+  String _apiHostname = '';
 
   @override
   void initState() {
@@ -34,16 +36,45 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _fetchEnvVariable() async {
-    final response =
-        await http.get(Uri.parse('https://localhost:7265/get-env-variable'));
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+    try {
+      final response =
+          await http.get(Uri.parse('https://localhost:7265/get-env-variable'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        _apiHostname = data['realHostname'];
+        setState(() {
+          _envVariable = data.toString();
+        });
+      } else {
+        setState(() {
+          _envVariable = 'Failed to load environment variable';
+        });
+      }
+    } catch (e) {
       setState(() {
-        _envVariable = data.toString();
+        _envVariable = e.toString();
       });
-    } else {
+    }
+  }
+
+  Future<void> _fetchOther() async {
+    try {
+      final response = await http
+          .get(Uri.parse('https://$_apiHostname:7579/weatherforecast'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        setState(() {
+          _otherEnvVariable = data.toString();
+        });
+      } else {
+        setState(() {
+          _otherEnvVariable = 'Failed to load api';
+        });
+      }
+    } catch (e) {
       setState(() {
-        _envVariable = 'Failed to load environment variable';
+        _otherEnvVariable = e.toString();
       });
     }
   }
@@ -55,9 +86,20 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Flutter Web Environment Variable'),
       ),
       body: Center(
-        child: Text(
-          _envVariable,
-          style: const TextStyle(fontSize: 24),
+        child: Column(
+          children: [
+            Text(
+              _envVariable,
+              style: const TextStyle(fontSize: 24),
+            ),
+            ElevatedButton(
+                onPressed: () => {_fetchOther()},
+                child: const Text('Use Different Container Api')),
+            Text(
+              _otherEnvVariable,
+              style: const TextStyle(fontSize: 24),
+            ),
+          ],
         ),
       ),
     );

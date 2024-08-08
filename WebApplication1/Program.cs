@@ -31,7 +31,8 @@ app.MapGet("/get-env-variable", async context =>
 {
 	var envVariable = app.Configuration["ASPNETCORE_ENVIRONMENT"] ?? "Environment variable not set";
 	var hostname = app.Configuration["CUSTOM_VARIABLE"] ?? "Environment variable not set";
-	var response = new { envVariable, hostname };
+	var realHostname = app.Environment.IsDevelopment() ? "localhost" : "apiservice";
+	var response = new { envVariable, hostname, realHostname };
 	context.Response.ContentType = "application/json";
 	await context.Response.WriteAsync(JsonSerializer.Serialize(response));
 });
