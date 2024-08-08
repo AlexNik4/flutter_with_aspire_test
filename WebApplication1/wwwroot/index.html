@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Environment Variable</title>
+</head>
+<body>
+    <h1>Display Environment Variable</h1>
+    <p id="envVariable"></p>
+
+    <script>
+        // Fetch the environment variable from the server
+        fetch('/get-env-variable')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('envVariable').innerText = data.envVariable || 'Environment variable not set';
+            });
+    </script>
+</body>
+</html>
