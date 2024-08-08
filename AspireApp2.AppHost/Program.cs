@@ -15,7 +15,7 @@ builder.AddProject<Projects.WebApplication1>("flutterweb")
 	.WithReference(apiService);
 
 builder.AddProject<Projects.TestMqttBroker>("testmqttbroker")
-	.WithEndpoint(port: 5282, targetPort: 5280, scheme: "tcp", name: "mqqtport", isExternal: true, isProxied: false)
-	.WithEndpoint(port: 5283, targetPort: 5281, scheme: "tcp", name: "mqqtwebport", isExternal: true, isProxied: false);
+	.WithEndpoint(targetPort: 5280, scheme: "tcp", name: "mqqtport", env: "mqttportenv", isExternal: true)
+	.WithEndpoint(targetPort: 5281, scheme: "tcp", name: "mqqtwebport", env: "mqttwebportenv", isExternal: true);
 
 builder.Build().Run();
