@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -28,6 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String _envVariable = 'Loading...';
   String _otherEnvVariable = 'Loading...';
   String _apiHostname = '';
+  String _anyUrl = '';
+  String _anyResponse = '';
 
   @override
   void initState() {
@@ -37,8 +41,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _fetchEnvVariable() async {
     try {
-      final response =
-          await http.get(Uri.parse('https://localhost:7265/get-env-variable'));
+      var host =
+          Uri.base.host; // This gives you the scheme, hostname, and port.
+      if (host == "localhost") {
+        host = "https://localhost:7265";
+      } else {
+        host = "https://$host";
+      }
+      final response = await http.get(Uri.parse('$host/get-env-variable'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         _apiHostname = data['realHostname'];
@@ -79,6 +89,27 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> _fetchAny() async {
+    try {
+      final response = await http.get(Uri.parse(_anyUrl));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        setState(() {
+          _anyResponse = data.toString();
+        });
+      } else {
+        setState(() {
+          _anyResponse = 'Failed to load api';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _anyResponse = e.toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +128,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text('Use Different Container Api')),
             Text(
               _otherEnvVariable,
+              style: const TextStyle(fontSize: 24),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter any api url',
+              ),
+              onChanged: (value) {
+                _anyUrl = value;
+              },
+            ),
+            ElevatedButton(
+                onPressed: () => {_fetchAny()},
+                child: const Text('Fetch Any Api')),
+            Text(
+              _anyResponse,
               style: const TextStyle(fontSize: 24),
             ),
           ],

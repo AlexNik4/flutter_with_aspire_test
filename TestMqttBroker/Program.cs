@@ -5,8 +5,6 @@ int mqttPort = 5280;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-
 // Configure Kestrel to listen on specific ports
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -19,6 +17,8 @@ builder.WebHost.ConfigureKestrel(options =>
 	// This will allow MQTT connections based on HTTP WebSockets with URI "0:0:0:0:5281/mqtt"
 	options.ListenAnyIP(mqttPort + 1); // Default HTTP pipeline
 });
+
+builder.AddServiceDefaults();
 
 builder.Services.AddHostedMqttServer(optionsBuilder =>
 {

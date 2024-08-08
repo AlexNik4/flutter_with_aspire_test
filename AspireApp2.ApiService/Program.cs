@@ -18,8 +18,9 @@ var summaries = new[]
 
 app.UseCors("AllowSpecificOrigins");
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/weatherforecast", (ILogger<Program> logger) =>
 {
+	logger.LogInformation("This is new. Version 1");
 	var forecast = Enumerable.Range(1, 5).Select(index =>
 		new WeatherForecast
 		(
