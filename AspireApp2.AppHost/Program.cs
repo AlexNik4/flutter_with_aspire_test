@@ -9,7 +9,11 @@ builder.AddProject<Projects.AspireApp2_Web>("webfrontend")
 	.WithReference(cache)
 	.WithReference(apiService);
 
-builder.AddProject<Projects.WebApplication1>("webapplication1")
+builder.AddProject<Projects.WebApplication1>("flutterweb")
+	.WithExternalHttpEndpoints()
 	.WithReference(apiService);
+
+builder.AddProject<Projects.TestMqttBroker>("testmqttbroker")
+	.WithExternalHttpEndpoints();
 
 builder.Build().Run();

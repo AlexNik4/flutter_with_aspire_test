@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspireApp2.Tests", "AspireA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{7408DECB-26D2-4057-B11C-272201E5215D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestMqttBroker", "TestMqttBroker\TestMqttBroker.csproj", "{826F2A05-A9F3-461D-824C-348448587E7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{7408DECB-26D2-4057-B11C-272201E5215D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7408DECB-26D2-4057-B11C-272201E5215D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7408DECB-26D2-4057-B11C-272201E5215D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{826F2A05-A9F3-461D-824C-348448587E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{826F2A05-A9F3-461D-824C-348448587E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{826F2A05-A9F3-461D-824C-348448587E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{826F2A05-A9F3-461D-824C-348448587E7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
