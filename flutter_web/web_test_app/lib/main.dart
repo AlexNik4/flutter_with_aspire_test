@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mqtt5_client/mqtt5_browser_client.dart';
+import 'package:mqtt5_client/mqtt5_client.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,6 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String _apiHostname = '';
   String _anyUrl = '';
   String _anyResponse = '';
+  String _mqttUrl = 'ws://192.168.0.2:5281/mqtt';
+  String _mqttResponse = '';
 
   @override
   void initState() {
@@ -110,6 +114,28 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> _connectMqtt() async {
+    try {
+      final client = MqttBrowserClient(_mqttUrl, 'flutter_client_web');
+      client.port = 5281;
+      while (true) {
+        await client.connect();
+        if (client.connectionStatus!.state == MqttConnectionState.connected) {
+          setState(() {
+            _mqttResponse = 'Connected to Mqtt';
+          });
+          break;
+        } else {
+          await Future.delayed(const Duration(seconds: 10));
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _mqttResponse = e.toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,6 +169,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text('Fetch Any Api')),
             Text(
               _anyResponse,
+              style: const TextStyle(fontSize: 24),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter mqtt url',
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _mqttUrl = value;
+                });
+              },
+              controller: TextEditingController(text: _mqttUrl),
+            ),
+            ElevatedButton(
+                onPressed: () => {
+                      _connectMqtt(),
+                    },
+                child: const Text('Connect to Mqtt')),
+            Text(
+              _mqttResponse,
               style: const TextStyle(fontSize: 24),
             ),
           ],
